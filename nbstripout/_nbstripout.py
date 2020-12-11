@@ -108,7 +108,7 @@ import warnings
 from nbstripout._utils import strip_output
 try:
     # Jupyter >= 4
-    from nbformat import read, write, NO_CONVERT
+    from nbformat import read, writes, NO_CONVERT
     from nbformat.reader import NotJSONError
 except ImportError:
     # IPython 3
@@ -345,13 +345,13 @@ def main():
             if args.textconv:
                 with warnings.catch_warnings():
                     warnings.simplefilter("ignore", category=UserWarning)
-                    write(nb, output_stream)
+                    output_stream.write(writes(nb))
                 output_stream.flush()
             else:
                 with io.open(filename, 'w', encoding='utf8', newline='') as f:
                     with warnings.catch_warnings():
                         warnings.simplefilter("ignore", category=UserWarning)
-                        write(nb, f)
+                        f.write(writes(nb))
         except NotJSONError:
             print("'{}' is not a valid notebook".format(filename), file=sys.stderr)
             sys.exit(1)
@@ -375,7 +375,7 @@ def main():
             else:
                 with warnings.catch_warnings():
                     warnings.simplefilter("ignore", category=UserWarning)
-                    write(nb, output_stream)
+                    output_stream.write(writes(nb))
                 output_stream.flush()
         except NotJSONError:
             print('No valid notebook detected', file=sys.stderr)
